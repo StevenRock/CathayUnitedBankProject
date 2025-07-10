@@ -73,7 +73,12 @@ struct NewsData: Codable{
     let links: [Link]
 }
 
-struct Activity: Codable{
+struct Activities: Codable{
+    let total: Int
+    let data: [ActivityData]
+}
+
+struct ActivityData: Codable{
     let district: String
     let address: String
     let nLat: String //nlat
@@ -105,7 +110,7 @@ struct Activity: Codable{
     }
 }
 
-struct Calendar: Codable{
+struct CalendarData: Codable{
     let district: String
     let address: String
     let nLat: String //nlat

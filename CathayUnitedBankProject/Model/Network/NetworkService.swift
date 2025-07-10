@@ -87,6 +87,41 @@ class NetworkService {
         }
     }
     
+    func getActivity(begin: Date? = nil, end: Date? = nil, page: Int? = nil) async throws -> [ActivityData]{
+        var dict:[String: Any] = [:]
+        
+        if let begin{
+            let str = begin.transToString()
+            dict["begin"] = str
+        }
+        
+        if let end{
+            let str = end.transToString()
+            dict["end"] = str
+        }
+
+        if let page{
+            dict["page"] = page
+        }
+        
+        let para = parameterForAPI(dict: dict)
+        
+        do{
+            let res = try await NetworkManager.shared.callApi(method: .GET, url: "\(language)/\(kActivity)\(para)", returnType: Activities.self)
+            switch res{
+            case .success(let data):
+                return data.data
+            case .failure(ApiError.errorRes(let errRes)):
+                throw NetworkManager.HTTPError.NotOK(code: errRes.code)
+            case .failure(.internalErr(_)):
+                throw NetworkManager.HTTPError.NotOK(code: 400)
+            }
+        }catch let err{
+            print("get Activities error", err.localizedDescription)
+            throw NetworkManager.HTTPError.NotOK(code: 400)
+        }
+    }
+    
     private func parameterForAPI(dict: [String : Any]) -> String{
         var arr = [String]()
         for (key, val) in dict{
