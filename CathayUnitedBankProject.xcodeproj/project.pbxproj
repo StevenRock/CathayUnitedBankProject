@@ -6,6 +6,10 @@
 	objectVersion = 77;
 	objects = {
 
+/* Begin PBXBuildFile section */
+		B0C925942E20EE2200753BCC /* Kingfisher in Frameworks */ = {isa = PBXBuildFile; productRef = B0C925932E20EE2200753BCC /* Kingfisher */; };
+/* End PBXBuildFile section */
+
 /* Begin PBXFileReference section */
 		B0C9253E2E1F6A9B00753BCC /* CathayUnitedBankProject.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = CathayUnitedBankProject.app; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
@@ -36,6 +40,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				B0C925942E20EE2200753BCC /* Kingfisher in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -78,6 +83,7 @@
 			);
 			name = CathayUnitedBankProject;
 			packageProductDependencies = (
+				B0C925932E20EE2200753BCC /* Kingfisher */,
 			);
 			productName = CathayUnitedBankProject;
 			productReference = B0C9253E2E1F6A9B00753BCC /* CathayUnitedBankProject.app */;
@@ -107,6 +113,9 @@
 			);
 			mainGroup = B0C925352E1F6A9B00753BCC;
 			minimizedProjectReferenceProxies = 1;
+			packageReferences = (
+				B0C925922E20EE2200753BCC /* XCRemoteSwiftPackageReference "Kingfisher" */,
+			);
 			preferredProjectObjectVersion = 77;
 			productRefGroup = B0C9253F2E1F6A9B00753BCC /* Products */;
 			projectDirPath = "";
@@ -333,6 +342,25 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
+
+/* Begin XCRemoteSwiftPackageReference section */
+		B0C925922E20EE2200753BCC /* XCRemoteSwiftPackageReference "Kingfisher" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/onevcat/Kingfisher";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 8.4.0;
+			};
+		};
+/* End XCRemoteSwiftPackageReference section */
+
+/* Begin XCSwiftPackageProductDependency section */
+		B0C925932E20EE2200753BCC /* Kingfisher */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = B0C925922E20EE2200753BCC /* XCRemoteSwiftPackageReference "Kingfisher" */;
+			productName = Kingfisher;
+		};
+/* End XCSwiftPackageProductDependency section */
 	};
 	rootObject = B0C925362E1F6A9B00753BCC /* Project object */;
 }

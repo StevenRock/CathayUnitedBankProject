@@ -12,7 +12,7 @@ struct Attractions: Codable{
     let data: [AttractionData]
 }
 
-struct AttractionData: Codable {
+struct AttractionData: Hashable, Codable {
     let id: Int
     let name: String
     let nameZH: String? //name_zh
@@ -60,7 +60,7 @@ struct News: Codable{
     let data: [NewsData]
 }
 
-struct NewsData: Codable{
+struct NewsData: Hashable, Codable{
     let id: Int
     let title: String
     let description: String
@@ -175,24 +175,24 @@ struct Tour: Codable{
     let files: [File]
 }
 
-struct Category: Codable {
+struct Category: Hashable, Codable {
     let id: Int
     let name: String
 }
 
-struct Image: Codable {
+struct Image: Hashable, Codable {
     let src: String
     let subject: String
     let ext: String
 }
 
-struct File: Codable{
+struct File: Hashable, Codable{
     let src: String
     let subject: String
     let ext: String
 }
 
-struct Link: Codable{
+struct Link: Hashable, Codable{
     let src: String
     let subject: String
 }
