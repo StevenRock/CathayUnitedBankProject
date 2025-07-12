@@ -17,22 +17,13 @@ class HomeTableViewContainerView<T: Hashable>: BaseView, UITableViewDelegate {
     }()
     
     var dataSource: UITableViewDiffableDataSource<DiffableSection, T>!
-//    private lazy var dataSource: UITableViewDiffableDataSource<DiffableSection, T> = {
-//        return UITableViewDiffableDataSource(tableView: tableView) { tableView, indexPath, model -> cellType.self? in
-//            let cell = tableView.dequeueReusableCell(withIdentifier: "cell", for: indexPath) as? HomeNewsTableViewCell
-//            cell?.setCell(model)
-//            
-//            return cell
-//        }
-//    }()
     
-    var cellDidSelected: ((NewsData) -> Void)?
+    var cellDidSelected: ((T) -> Void)?
     var tableViewDidScroll: ((Bool)->Void)?
     var lastContentOffset: CGFloat = 0
     
     let cellType: UITableViewCell.Type
     
-//    let color: UIColor
     
     init(cell: UITableViewCell.Type){
         self.cellType = cell
@@ -43,7 +34,7 @@ class HomeTableViewContainerView<T: Hashable>: BaseView, UITableViewDelegate {
         tableView.register(cell, forCellReuseIdentifier: "cell")
         
         dataSource = UITableViewDiffableDataSource<DiffableSection, T>(tableView: tableView) { tableView, indexPath, model in
-            let cell = tableView.dequeueReusableCell(withIdentifier: "cell", for: indexPath) as? HomeNewsTableViewCell
+            let cell = tableView.dequeueReusableCell(withIdentifier: "cell", for: indexPath) as? BaseTableViewCell
             cell?.setCell(model)
             return cell
         }
@@ -75,14 +66,11 @@ class HomeTableViewContainerView<T: Hashable>: BaseView, UITableViewDelegate {
     
     //UITableViewDelegate
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-//        let vc = AccountOption.allCases[indexPath.row].viewController
-//
-//        self.navigationController?.pushViewController(vc, animated: true)
+        
+        guard let selectedItem = dataSource.itemIdentifier(for: indexPath) else { return }
+        
+        self.cellDidSelected?(selectedItem)
     }
-    
-//    func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-//        return 100
-//    }
     
     func scrollViewWillBeginDragging(_ scrollView: UIScrollView) {
         self.lastContentOffset = scrollView.contentOffset.y
@@ -97,22 +85,4 @@ class HomeTableViewContainerView<T: Hashable>: BaseView, UITableViewDelegate {
     }
 }
 
-//extension HomeTableViewContainerView: UITableViewDelegate where T: UITableViewCell{
-//    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-////        let vc = AccountOption.allCases[indexPath.row].viewController
-////        
-////        self.navigationController?.pushViewController(vc, animated: true)
-//    }
-//    
-//    func scrollViewWillBeginDragging(_ scrollView: UIScrollView) {
-//        self.lastContentOffset = scrollView.contentOffset.y
-//    }
-//    
-//    func scrollViewDidScroll(_ scrollView: UIScrollView) {
-//        if self.lastContentOffset < scrollView.contentOffset.y {
-//            tableViewDidScroll?(true)
-//        } else if self.lastContentOffset > scrollView.contentOffset.y {
-//            tableViewDidScroll?(false)
-//        }
-//    }
-//}
+

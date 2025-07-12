@@ -25,13 +25,18 @@ class HomeViewController: BaseViewController {
     
     private lazy var newsTableView: HomeTableViewContainerView = {
         let v = HomeTableViewContainerView<NewsData>(cell: HomeNewsTableViewCell.self)
-        
+        v.cellDidSelected = { [weak self] val in
+            self?.viewModel?.getSelectedNewsData(val)
+        }
         v.translatesAutoresizingMaskIntoConstraints = false
         return v
     }()
     
     private lazy var attractionsTableView: HomeTableViewContainerView = {
         let v = HomeTableViewContainerView<AttractionData>(cell: HomeAttractionsTableViewCell.self)
+        v.cellDidSelected = { [weak self] val in
+            self?.viewModel?.getSelectedAttractionData(val)
+        }
         
         v.translatesAutoresizingMaskIntoConstraints = false
         return v
@@ -39,25 +44,6 @@ class HomeViewController: BaseViewController {
     
     var newsTableViewConst: NSLayoutConstraint?
     var attractionTableViewConst: NSLayoutConstraint?
-//    lazy var newsTableView: UITableView = {
-//        let v = UITableView()
-//        v.separatorStyle = .none
-//        v.delegate = self
-//        v.backgroundColor = .clear
-////        v.tableHeaderView = headerView
-//        v.register(AccountOptionTableViewCell.self, forCellReuseIdentifier: "cell")
-//        v.translatesAutoresizingMaskIntoConstraints = false
-//        return v
-//    }()
-//    
-//    lazy var dataSource: UITableViewDiffableDataSource<DiffableSection, AttractionData> = {
-//        return UITableViewDiffableDataSource(tableView: tableView) { tableView, indexPath, model -> AccountOptionTableViewCell? in
-//            let cell = tableView.dequeueReusableCell(withIdentifier: "cell", for: indexPath) as? AccountOptionTableViewCell
-//            cell?.setCell(model)
-//            
-//            return cell
-//        }
-//    }()
     
     var viewModel: HomeViewModelDelegate?{
         didSet{
@@ -67,12 +53,12 @@ class HomeViewController: BaseViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        
+        isNavHidden = true
     }
     
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
-        
+        segmentControl.selectedSegmentIndex = 0
     }
 
     override func setupUI() {
@@ -86,7 +72,7 @@ class HomeViewController: BaseViewController {
         }
         
         let newsLeadingConst = newsTableView.leadingAnchor.constraint(equalTo: self.view.leadingAnchor)
-        let attractionsLeadingConst = attractionsTableView.leadingAnchor.constraint(equalTo: newsTableView.trailingAnchor)
+        let attractionsLeadingConst = attractionsTableView.leadingAnchor.constraint(equalTo: self.view.leadingAnchor, constant: self.view.bounds.width)
         
         NSLayoutConstraint.activate([
             segmentControl.topAnchor.constraint(equalTo: self.view.topAnchor, constant: 100),
@@ -95,12 +81,12 @@ class HomeViewController: BaseViewController {
             
             newsTableView.topAnchor.constraint(equalTo: segmentControl.bottomAnchor),
             newsLeadingConst,
-            newsTableView.trailingAnchor.constraint(equalTo: self.view.trailingAnchor),
+            newsTableView.widthAnchor.constraint(equalTo: self.view.widthAnchor),
             newsTableView.bottomAnchor.constraint(equalTo: self.view.bottomAnchor),
             
             attractionsTableView.topAnchor.constraint(equalTo: newsTableView.topAnchor),
             attractionsLeadingConst,
-            attractionsTableView.trailingAnchor.constraint(equalTo: self.view.trailingAnchor),
+            attractionsTableView.widthAnchor.constraint(equalTo: self.view.widthAnchor),
             attractionsTableView.bottomAnchor.constraint(equalTo: self.view.bottomAnchor)
         ])
         
@@ -123,22 +109,36 @@ class HomeViewController: BaseViewController {
                 self?.attractionsTableView.setSnapShot(data: val)
             })
             .store(in: &cancellables)
+        
+        viewModel?.urlPublisher
+            .receive(on: DispatchQueue.main)
+            .sink(receiveValue: { [weak self] val in
+                guard let val else { return }
+                let vc = DefaultWebViewController()
+                vc.url = val
+                vc.titleVal = "最新消息"
+                self?.navigationController?.pushViewController(vc, animated: true)
+                
+            })
+            .store(in: &cancellables)
+    }
+    
+    func goWeb(_ data: NewsData){
+        
     }
     
     @objc func changeSegment(sender: UISegmentedControl){
-        var offset: CGFloat = 0
+        var newsOffset: CGFloat = 0
+        var attractionOffet: CGFloat = 0
         
-        switch sender.selectedSegmentIndex{
-        case 0:
-            offset = 0
-        case 1:
-            offset = -self.view.bounds.width
-        default:
-            break
-        }
+        let w = self.view.bounds.width
         
-        newsTableViewConst?.constant = offset
-        attractionTableViewConst?.constant = offset
+        newsOffset = (sender.selectedSegmentIndex == 0) ? 0 : -self.view.bounds.width
+        
+        attractionOffet = (sender.selectedSegmentIndex == 1) ? 0 : w
+        
+        newsTableViewConst?.constant = newsOffset
+        attractionTableViewConst?.constant = attractionOffet
         
         UIViewPropertyAnimator.runningPropertyAnimator(withDuration: 0.5, delay: 0) { [weak self] in
             self?.view.layoutIfNeeded()

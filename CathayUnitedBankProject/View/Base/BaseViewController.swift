@@ -39,7 +39,7 @@ class BaseViewController: UIViewController{
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         
-        self.navigationController?.setNavigationBarHidden(isNavHidden, animated: true)
+        self.navigationController?.setNavigationBarHidden(isNavHidden, animated: false)
         self.tabBarController?.tabBar.isHidden = isTabbarHidden
     }
     
@@ -84,14 +84,14 @@ class BaseViewController: UIViewController{
 //        }
 //    }
     
-    func setNavigationRightButton(button: UIButton){
-        let rightBarItem = UIBarButtonItem(customView: button)
-        
-        if self.navigationItem.rightBarButtonItems != nil{
-            self.navigationItem.rightBarButtonItems?.append(rightBarItem)
-        }else{
-            self.navigationItem.rightBarButtonItems = [rightBarItem]
-        }
-    }
+//    func setNavigationRightButton(button: UIButton){
+//        let rightBarItem = UIBarButtonItem(customView: button)
+//        
+//        if self.navigationItem.rightBarButtonItems != nil{
+//            self.navigationItem.rightBarButtonItems?.append(rightBarItem)
+//        }else{
+//            self.navigationItem.rightBarButtonItems = [rightBarItem]
+//        }
+//    }
 }
 

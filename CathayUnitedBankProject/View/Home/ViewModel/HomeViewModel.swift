@@ -10,17 +10,22 @@ import Foundation
 protocol HomeViewModelDelegate{
     var newsListPublisher: Published<[NewsData]>.Publisher {get}
     var attractionsListPublisher: Published<[AttractionData]>.Publisher {get}
+    var urlPublisher: Published<URL?>.Publisher {get}
     
     func getNextNews()
     func getNextAttractions()
+    func getSelectedNewsData(_ data: NewsData)
+    func getSelectedAttractionData(_ data: AttractionData)
 }
 
 class HomeViewModel: HomeViewModelDelegate{
     @Published var newsList: [NewsData]
     @Published var attractionsList: [AttractionData]
+    @Published var url: URL?
     
     var newsListPublisher: Published<[NewsData]>.Publisher { $newsList}
     var attractionsListPublisher: Published<[AttractionData]>.Publisher { $attractionsList}
+    var urlPublisher: Published<URL?>.Publisher {$url}
     
     var newsPage: Int
     var attractionPage: Int
@@ -53,20 +58,28 @@ class HomeViewModel: HomeViewModelDelegate{
     
     func getNextNews(){
         let dateTuple = getDate()
-        
-        newsPage += 1
-        
+
         Task{
             newsList = try await NetworkService.shared.getNews(begin: dateTuple.begin, end: dateTuple.end, page: newsPage)
+            newsPage += 1
         }
     }
     
     func getNextAttractions(){
-        attractionPage += 1
         
         Task{
             attractionsList = try await NetworkService.shared.getAllAttractions(page: attractionPage)
+            attractionPage += 1
         }
+    }
+    
+    func getSelectedNewsData(_ data: NewsData){
+        let urlStr = data.url
+        url = URL(string: urlStr)
+    }
+    
+    func getSelectedAttractionData(_ data: AttractionData){
+        
     }
     
     private func getDate()->(begin:Date, end:Date){

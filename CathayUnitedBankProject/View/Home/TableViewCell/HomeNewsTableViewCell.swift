@@ -40,12 +40,21 @@ class HomeNewsTableViewCell: BaseTableViewCell{
         return v
     }()
     
+    override func prepareForReuse() {
+        super.prepareForReuse()
+        
+        titleLabel.text = ""
+        descriptionLabel.text = ""
+    }
+    
     override func setupUI() {
         self.backgroundColor = .clear
         
-        [backView, titleLabel, descriptionLabel].forEach { [weak self] v in
-            self?.addSubview(v)
+        [titleLabel, descriptionLabel].forEach { [weak self] v in
+            self?.backView.addSubview(v)
         }
+        
+        self.addSubview(backView)
         
         NSLayoutConstraint.activate([
             backView.topAnchor.constraint(equalTo: self.topAnchor, constant: 5),
@@ -53,15 +62,15 @@ class HomeNewsTableViewCell: BaseTableViewCell{
             backView.trailingAnchor.constraint(equalTo: self.trailingAnchor, constant: -5),
             backView.bottomAnchor.constraint(equalTo: self.bottomAnchor, constant: -5),
             
-            titleLabel.topAnchor.constraint(equalTo: self.topAnchor, constant: 5),
-            titleLabel.trailingAnchor.constraint(equalTo: self.trailingAnchor, constant: -5),
-            titleLabel.leadingAnchor.constraint(equalTo: self.leadingAnchor, constant: 5),
+            titleLabel.topAnchor.constraint(equalTo: backView.topAnchor, constant: 5),
+            titleLabel.trailingAnchor.constraint(equalTo: backView.trailingAnchor, constant: -5),
+            titleLabel.leadingAnchor.constraint(equalTo: backView.leadingAnchor, constant: 5),
             titleLabel.heightAnchor.constraint(equalToConstant: 40),
             
             descriptionLabel.topAnchor.constraint(equalTo: titleLabel.bottomAnchor, constant: 5),
-            descriptionLabel.trailingAnchor.constraint(equalTo: self.trailingAnchor, constant: -5),
-            descriptionLabel.leadingAnchor.constraint(equalTo: self.leadingAnchor, constant: 5),
-            descriptionLabel.bottomAnchor.constraint(equalTo: self.bottomAnchor, constant: -5)
+            descriptionLabel.trailingAnchor.constraint(equalTo: backView.trailingAnchor, constant: -5),
+            descriptionLabel.leadingAnchor.constraint(equalTo: backView.leadingAnchor, constant: 5),
+            descriptionLabel.bottomAnchor.constraint(equalTo: backView.bottomAnchor, constant: -5)
             
         ])
     }
