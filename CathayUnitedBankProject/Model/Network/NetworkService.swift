@@ -37,7 +37,7 @@ class NetworkService {
         let para = parameterForAPI(dict: dict)
         
         do{
-            let res = try await NetworkManager.shared.callApi(method: .GET, url: "\(language)/\(kAllAttractions)\(para)", returnType: Attractions.self)
+            let res = try await NetworkManager.shared.callApi(method: .GET, url: "\(language.rawValue)\(kAllAttractions)\(para)", returnType: Attractions.self)
             switch res{
             case .success(let data):
                 return data.data
@@ -72,7 +72,7 @@ class NetworkService {
         let para = parameterForAPI(dict: dict)
         
         do{
-            let res = try await NetworkManager.shared.callApi(method: .GET, url: "\(language)/\(kEvent)\(para)", returnType: News.self)
+            let res = try await NetworkManager.shared.callApi(method: .GET, url: "\(language.rawValue)\(kEvent)\(para)", returnType: News.self)
             switch res{
             case .success(let data):
                 return data.data

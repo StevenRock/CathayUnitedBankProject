@@ -32,12 +32,10 @@ class HomeTableViewContainerView<T: Hashable>: BaseView, UITableViewDelegate {
     
     let cellType: UITableViewCell.Type
     
-    let color: UIColor
+//    let color: UIColor
     
-    init(cell: UITableViewCell.Type, color: UIColor){
+    init(cell: UITableViewCell.Type){
         self.cellType = cell
-        self.color = color
-        
         
         super.init(frame: .zero)
         
@@ -45,10 +43,10 @@ class HomeTableViewContainerView<T: Hashable>: BaseView, UITableViewDelegate {
         tableView.register(cell, forCellReuseIdentifier: "cell")
         
         dataSource = UITableViewDiffableDataSource<DiffableSection, T>(tableView: tableView) { tableView, indexPath, model in
-              let cell = tableView.dequeueReusableCell(withIdentifier: "cell", for: indexPath) as? HomeNewsTableViewCell
+            let cell = tableView.dequeueReusableCell(withIdentifier: "cell", for: indexPath) as? HomeNewsTableViewCell
             cell?.setCell(model)
-              return cell
-           }
+            return cell
+        }
     }
     
     required init?(coder: NSCoder) {
@@ -56,7 +54,15 @@ class HomeTableViewContainerView<T: Hashable>: BaseView, UITableViewDelegate {
     }
     
     override func setupUI() {
-        self.backgroundColor = color
+        self.backgroundColor = .clear
+        self.addSubview(tableView)
+        
+        NSLayoutConstraint.activate([
+            tableView.topAnchor.constraint(equalTo: self.topAnchor),
+            tableView.leadingAnchor.constraint(equalTo: self.leadingAnchor),
+            tableView.trailingAnchor.constraint(equalTo: self.trailingAnchor),
+            tableView.bottomAnchor.constraint(equalTo: self.bottomAnchor)
+        ])
     }
     
     func setSnapShot(data: [T]){
@@ -73,6 +79,10 @@ class HomeTableViewContainerView<T: Hashable>: BaseView, UITableViewDelegate {
 //
 //        self.navigationController?.pushViewController(vc, animated: true)
     }
+    
+//    func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
+//        return 100
+//    }
     
     func scrollViewWillBeginDragging(_ scrollView: UIScrollView) {
         self.lastContentOffset = scrollView.contentOffset.y

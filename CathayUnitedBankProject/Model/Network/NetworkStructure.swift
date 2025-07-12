@@ -15,37 +15,37 @@ struct Attractions: Codable{
 struct AttractionData: Hashable, Codable {
     let id: Int
     let name: String
-    let nameZH: String? //name_zh
+    let nameZh: String? //name_zh
     let openStatus: Int //open_status
     let introduction: String
     let openTime: String //open_time
     let zipCode: String //zipcode
-    let district: String
-    let addess: String
+    let distric: String
+    let address: String
     let tel: String
     let fax: String
     let email: String
-    let month: String
+    let months: String
     let nLat: Double //nlat
     let eLong: Double //elong
     let officialSite: String //official_site
     let facebook: String
     let ticket: String
     let remind: String
-    let stayTime: String
+    let staytime: String
     let modified: String
     let url: String
     let category: [Category]
     let target: [Category]
     let service: [Category]
-    let firendly: [Category]
-    let images: [Image]
-    let files: [File]
+    let friendly: [Category]
+    let images: [Image]?
+    let files: [AttractionFile]
     let links: [Link]
     
     enum CodingKeys: String, CodingKey {
-        case id,name,introduction,district,addess,tel,fax,email,month,facebook,ticket,remind,stayTime,modified,url,category,target,service,firendly,images,files,links
-        case nameZH = "name_zh"
+        case id,name,introduction,distric,address,tel,fax,email,months,facebook,ticket,remind,staytime,modified,url,category,target,service,friendly,images,files,links
+        case nameZh = "name_zh"
         case openStatus = "open_status"
         case openTime = "open_time"
         case zipCode = "zipcode"
@@ -64,12 +64,12 @@ struct NewsData: Hashable, Codable{
     let id: Int
     let title: String
     let description: String
-    let begin: String
-    let end: String
+    let begin: String?
+    let end: String?
     let posted: String
     let modified: String
     let url: String
-    let files: [File]
+    let files: [AttractionFile]
     let links: [Link]
 }
 
@@ -99,7 +99,7 @@ struct ActivityData: Codable{
     let posted: String
     let modified: String
     let url: String
-    let files: [File]
+    let files: [AttractionFile]
     let links: [Link]
     
     enum CodingKeys: String, CodingKey {
@@ -129,7 +129,7 @@ struct CalendarData: Codable{
     let posted: String
     let modified: String
     let url: String
-    let files: [File]
+    let files: [AttractionFile]
     let links: [Link]
     
     enum CodingKeys: String, CodingKey {
@@ -172,7 +172,7 @@ struct Tour: Codable{
     let transport: [Category]
     let users: [Category]
     let modified: String
-    let files: [File]
+    let files: [AttractionFile]
 }
 
 struct Category: Hashable, Codable {
@@ -186,7 +186,7 @@ struct Image: Hashable, Codable {
     let ext: String
 }
 
-struct File: Hashable, Codable{
+struct AttractionFile: Hashable, Codable{
     let src: String
     let subject: String
     let ext: String

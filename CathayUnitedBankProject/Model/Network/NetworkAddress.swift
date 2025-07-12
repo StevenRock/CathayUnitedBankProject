@@ -8,7 +8,7 @@
 
 //GET
 let kAllAttractions = "/Attractions/All"
-let kEvent = "/Event/News"
+let kEvent = "/Events/News"
 let kActivity = "/Events/Activity"
 let kCalendar = "/Events/Calendar"
 let kMedia = "/Media/Audio"

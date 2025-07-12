@@ -14,15 +14,31 @@ class HomeViewController: BaseViewController {
         return v
     }()
     
-//    lazy var segmentControl: UISegmentedControl = {
-//        let v = UISegmentedControl(items: [itemsUrls.first!.title, itemsUrls.last!.title])
-//        v.backgroundColor = .clear
-//        v.tintColor = .white
-//        v.addTarget(self, action: #selector(changeUrl), for: .valueChanged)
-//        v.translatesAutoresizingMaskIntoConstraints = false
-//        return v
-//    }()
+    lazy var segmentControl: UISegmentedControl = {
+        let v = UISegmentedControl(items: ["最新消息", "旅遊景點"])
+        v.backgroundColor = .clear
+        v.tintColor = .white
+        v.addTarget(self, action: #selector(changeSegment), for: .valueChanged)
+        v.translatesAutoresizingMaskIntoConstraints = false
+        return v
+    }()
     
+    private lazy var newsTableView: HomeTableViewContainerView = {
+        let v = HomeTableViewContainerView<NewsData>(cell: HomeNewsTableViewCell.self)
+        
+        v.translatesAutoresizingMaskIntoConstraints = false
+        return v
+    }()
+    
+    private lazy var attractionsTableView: HomeTableViewContainerView = {
+        let v = HomeTableViewContainerView<AttractionData>(cell: HomeAttractionsTableViewCell.self)
+        
+        v.translatesAutoresizingMaskIntoConstraints = false
+        return v
+    }()
+    
+    var newsTableViewConst: NSLayoutConstraint?
+    var attractionTableViewConst: NSLayoutConstraint?
 //    lazy var newsTableView: UITableView = {
 //        let v = UITableView()
 //        v.separatorStyle = .none
@@ -43,11 +59,9 @@ class HomeViewController: BaseViewController {
 //        }
 //    }()
     
-    private var viewModel: HomeViewModel?{
+    var viewModel: HomeViewModelDelegate?{
         didSet{
             binding()
-            
-            let v = HomeTableViewContainerView<NewsData>(cell: HomeNewsTableViewCell.self, color: .red)
         }
     }
 
@@ -62,49 +76,73 @@ class HomeViewController: BaseViewController {
     }
 
     override func setupUI() {
-        self.view.backgroundColor = .white
+        self.view.backgroundColor = .themeBackground
         
         homeTitleView.frame = self.view.frame
         
-        self.view.addSubview(homeTitleView)
+        [newsTableView, attractionsTableView, segmentControl, homeTitleView].forEach { [weak self] v in
+            guard let self else {return}
+            self.view.addSubview(v)
+        }
+        
+        let newsLeadingConst = newsTableView.leadingAnchor.constraint(equalTo: self.view.leadingAnchor)
+        let attractionsLeadingConst = attractionsTableView.leadingAnchor.constraint(equalTo: newsTableView.trailingAnchor)
+        
+        NSLayoutConstraint.activate([
+            segmentControl.topAnchor.constraint(equalTo: self.view.topAnchor, constant: 100),
+            segmentControl.leadingAnchor.constraint(equalTo: self.view.leadingAnchor),
+            segmentControl.trailingAnchor.constraint(equalTo: self.view.trailingAnchor),
+            
+            newsTableView.topAnchor.constraint(equalTo: segmentControl.bottomAnchor),
+            newsLeadingConst,
+            newsTableView.trailingAnchor.constraint(equalTo: self.view.trailingAnchor),
+            newsTableView.bottomAnchor.constraint(equalTo: self.view.bottomAnchor),
+            
+            attractionsTableView.topAnchor.constraint(equalTo: newsTableView.topAnchor),
+            attractionsLeadingConst,
+            attractionsTableView.trailingAnchor.constraint(equalTo: self.view.trailingAnchor),
+            attractionsTableView.bottomAnchor.constraint(equalTo: self.view.bottomAnchor)
+        ])
+        
+        newsTableViewConst = newsLeadingConst
+        attractionTableViewConst = attractionsLeadingConst
     }
     
     override func binding() {
-//        viewModel?.accountOptionsPublisher
-//            .receive(on: DispatchQueue.main)
-//            .sink(receiveValue: { [weak self] val in
-//                var snapShot = NSDiffableDataSourceSnapshot<DiffableSection, AccountOption>()
-//                snapShot.appendSections([.main])
-//                snapShot.appendItems(val)
-//                
-//                self?.dataSource.apply(snapShot, animatingDifferences: true)
-//            })
-//            .store(in: &cancellables)
+        viewModel?.newsListPublisher
+            .receive(on: DispatchQueue.main)
+            .sink(receiveValue: { [weak self] val in
+                self?.newsTableView.setSnapShot(data: val)
+
+            })
+            .store(in: &cancellables)
 //        
-//        viewModel?.memberBriefPublisher
-//            .receive(on: DispatchQueue.main)
-//            .sink(receiveValue: { [weak self] val in
-//                if let val = val{
-//                    self?.headerView.setData(title: val.name, id: val.uid)
-//                }
-//            })
-//            .store(in: &cancellables)
-    }
-
-}
-
-extension HomeViewController: UITableViewDelegate{
-    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-//        let vc = AccountOption.allCases[indexPath.row].viewController
-        
-//        self.navigationController?.pushViewController(vc, animated: true)
+        viewModel?.attractionsListPublisher
+            .receive(on: DispatchQueue.main)
+            .sink(receiveValue: { [weak self] val in
+                self?.attractionsTableView.setSnapShot(data: val)
+            })
+            .store(in: &cancellables)
     }
     
-//    @objc func headerDidTap(){
-//        guard let viewModel = viewModel else { return }
-//        let vc = AccountMemberInfoViewController(memberInfo: viewModel.memberInfo)
-//        
-//        self.navigationController?.pushViewController(vc, animated: true)
-//    }
-}
+    @objc func changeSegment(sender: UISegmentedControl){
+        var offset: CGFloat = 0
+        
+        switch sender.selectedSegmentIndex{
+        case 0:
+            offset = 0
+        case 1:
+            offset = -self.view.bounds.width
+        default:
+            break
+        }
+        
+        newsTableViewConst?.constant = offset
+        attractionTableViewConst?.constant = offset
+        
+        UIViewPropertyAnimator.runningPropertyAnimator(withDuration: 0.5, delay: 0) { [weak self] in
+            self?.view.layoutIfNeeded()
+        }
+    }
 
+}
