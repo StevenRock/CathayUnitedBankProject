@@ -35,6 +35,10 @@ class HomeTitleContainerView: BaseView {
         return v
     }()
     
+    var expandView: LanguageExpandableView?
+    var languageBtn: UIButton?
+    var languageDidChoosed: ((Language)->Void)?
+    
     var smallLogoTopConst: NSLayoutConstraint?
     var smallLogoLeadConst: NSLayoutConstraint?
     var smallLofoBottomConst: NSLayoutConstraint?
@@ -50,7 +54,7 @@ class HomeTitleContainerView: BaseView {
         let smallTopConst = smallLogoImageView.topAnchor.constraint(equalTo: mainLogoImageView.topAnchor)
         let smallTrailingConst = smallLogoImageView.trailingAnchor.constraint(equalTo: mainLogoImageView.trailingAnchor)
         let smallBottomConst = smallLogoImageView.bottomAnchor.constraint(equalTo: mainLogoImageView.bottomAnchor)
-                
+        
         NSLayoutConstraint.activate([
             mainLogoImageView.centerXAnchor.constraint(equalTo: self.centerXAnchor),
             mainLogoImageView.centerYAnchor.constraint(equalTo: self.centerYAnchor),
@@ -58,11 +62,11 @@ class HomeTitleContainerView: BaseView {
             smallTopConst,
             smallTrailingConst,
             smallBottomConst,
-
+            
             smallLogoImageView.widthAnchor.constraint(equalTo: smallLogoImageView.heightAnchor),
-
+            
         ])
-                
+        
         smallLogoTopConst = smallTopConst
         smallLogoLeadConst = smallTrailingConst
         smallLofoBottomConst = smallBottomConst
@@ -111,12 +115,40 @@ class HomeTitleContainerView: BaseView {
                 superview.layoutIfNeeded()
                 
             } completion: { _ in
-                self.titleLabel.startMarquee(speed: 50)
+                self.titleLabel.startMarquee(speed: 30)
                 UIViewPropertyAnimator.runningPropertyAnimator(withDuration: 0.2, delay: 0) {
                     self.titleLabel.alpha = 1
                 }
+                
+                let v = UIButton(frame: CGRect(x: 10, y: 55, width: 40, height: 40))
+                v.setImage(UIImage(resource: .langIcon), for: .normal)
+                v.addTarget(self, action: #selector(self.langButtonClicked), for: .touchUpInside)
+                self.addSubview(v)
+                
+                self.languageBtn = v
             }
         }
+    }
+    
+    @objc func langButtonClicked(){
+        languageBtn?.isHidden = true
+        
+        let v = LanguageExpandableView(frame: self.superview!.frame)
+        v.languageDidChoosed = { lang in
+            self.titleLabel.text = lang.title
+            self.titleLabel.startMarquee(speed: 30)
+            
+            self.languageBtn?.isHidden = false
+            self.languageBtn?.setImage(lang.image, for: .normal)
+            self.languageDidChoosed?(lang)
+        }
+        
+        v.revealButton = {
+            self.languageBtn?.isHidden = false
+        }
+        self.superview?.addSubview(v)
+        
+        expandView = v
     }
 }
 

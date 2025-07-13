@@ -8,31 +8,27 @@
 import UIKit
 
 class MarqueeLabel: UIView{
-    private let label: UILabel = {
-        let label = UILabel()
-        label.font = .systemFont(ofSize: 17, weight: .medium)
-        label.textColor = .black
-        label.textAlignment = .center
-        label.numberOfLines = 1
-        
-        label.translatesAutoresizingMaskIntoConstraints = false
-        return label
-    }()
+    var isInit: Bool = true
+    var textLabel: UILabel?
+    
     var text: String = ""{
         didSet{
-            label.text = text
+            isInit = true
+            textLabel?.removeFromSuperview()
+            textLabel = nil
+            setupUI(text: text)
         }
     }
     
     var font: UIFont = .systemFont(ofSize: 12){
         didSet{
-            label.font = font
+            textLabel?.font = font
         }
     }
     
     var textColor: UIColor = .label{
         didSet{
-            label.textColor = textColor
+            textLabel?.textColor = textColor
         }
     }
     
@@ -40,14 +36,16 @@ class MarqueeLabel: UIView{
         
     override init(frame: CGRect){
         super.init(frame: frame)
-        setupUI()
     }
     
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
     
-    private func setupUI(){
+    private func setupUI(text: String){
+        let label = addLabel()
+        label.text = text
+        
         self.backgroundColor = .clear
         self.addSubview(label)
         self.clipsToBounds = true
@@ -57,23 +55,43 @@ class MarqueeLabel: UIView{
             label.leadingAnchor.constraint(equalTo: self.leadingAnchor),
             label.bottomAnchor.constraint(equalTo: self.bottomAnchor),
         ])
+        
+        textLabel = label
+        
+        textLabel?.layoutIfNeeded()
+    }
+    
+    func addLabel() -> UILabel{
+        let label = UILabel()
+        label.font = font
+        label.textColor = textColor
+        label.textAlignment = .center
+        label.numberOfLines = 1
+        
+        label.translatesAutoresizingMaskIntoConstraints = false
+        return label
     }
     
     func startMarquee(delay: TimeInterval = 3, speed: CGFloat = 0){
+        if isInit{
+            self.textLabel?.transform = CGAffineTransform(translationX: 0, y: 0)
+        }
+        
         self.speed = speed
         
-        guard speed != 0, label.bounds.width > self.bounds.width else {
-            label.trailingAnchor.constraint(equalTo: self.trailingAnchor).isActive = true
+        guard let textLabel, speed != 0, textLabel.bounds.width > self.bounds.width else {
+            textLabel?.trailingAnchor.constraint(equalTo: self.trailingAnchor).isActive = true
             return
         }
         
-        let distance = label.bounds.width
+        let distance = textLabel.bounds.width
         let duration = TimeInterval(distance / speed)
                 
         UIViewPropertyAnimator.runningPropertyAnimator(withDuration: duration, delay: delay, options: .curveEaseIn) {
-            self.label.transform = CGAffineTransform(translationX: -self.label.bounds.width, y: 0)
+            self.textLabel?.transform = CGAffineTransform(translationX: -textLabel.bounds.width, y: 0)
         } completion:{ _ in
-            self.label.transform = CGAffineTransform(translationX: self.bounds.width, y: 0)
+            self.isInit = false
+            self.textLabel?.transform = CGAffineTransform(translationX: self.bounds.width, y: 0)
             self.startMarquee(delay: 1, speed: speed)
         }
     }

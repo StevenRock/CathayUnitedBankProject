@@ -14,8 +14,8 @@
             filePath = "CathayUnitedBankProject/View/Home/ViewModel/HomeViewModel.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "72"
-            endingLineNumber = "72"
+            startingLineNumber = "75"
+            endingLineNumber = "75"
             landmarkName = "getNextAttractions()"
             landmarkType = "7">
          </BreakpointContent>
@@ -49,6 +49,22 @@
             startingLineNumber = "62"
             endingLineNumber = "62"
             landmarkName = "setSnapShot(data:)"
+            landmarkType = "7">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "2785E65A-9F5C-4057-82B3-587EE6D73C1A"
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "CathayUnitedBankProject/View/General/MarqueeLabel.swift"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "84"
+            endingLineNumber = "84"
+            landmarkName = "startMarquee(delay:speed:)"
             landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>

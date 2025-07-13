@@ -16,9 +16,12 @@ protocol HomeViewModelDelegate{
     func getNextAttractions()
     func getSelectedNewsData(_ data: NewsData)
     func getSelectedAttractionData(_ data: AttractionData)
+    func selectLanguage(_ language: Language)
 }
 
 class HomeViewModel: HomeViewModelDelegate{
+
+    
     @Published var newsList: [NewsData]
     @Published var attractionsList: [AttractionData]
     @Published var url: URL?
@@ -80,6 +83,14 @@ class HomeViewModel: HomeViewModelDelegate{
     
     func getSelectedAttractionData(_ data: AttractionData){
         
+    }
+    
+    func selectLanguage(_ language: Language) {
+        LanguageManager.shared.setLang(language) {
+            Task{
+                await self.getAllInfos()
+            }
+        }
     }
     
     private func getDate()->(begin:Date, end:Date){

@@ -9,8 +9,9 @@ import UIKit
 
 class HomeViewController: BaseViewController {
     
-    private let homeTitleView: HomeTitleContainerView = {
+    private lazy var homeTitleView: HomeTitleContainerView = {
         let v = HomeTitleContainerView()
+        v.languageDidChoosed = viewModel?.selectLanguage
         return v
     }()
     
@@ -122,6 +123,8 @@ class HomeViewController: BaseViewController {
             })
             .store(in: &cancellables)
     }
+    
+    
     
     func goWeb(_ data: NewsData){
         
