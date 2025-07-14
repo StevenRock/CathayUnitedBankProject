@@ -47,6 +47,8 @@ class HomeViewModel: HomeViewModelDelegate{
     
     func getAllInfos() async{
         let dateTuple = getDate()
+        newsPage = 1
+        attractionPage = 1
         
         do{
             async let newsRes = NetworkService.shared.getNews(begin: dateTuple.begin, end: dateTuple.end, page: newsPage)
@@ -96,6 +98,8 @@ class HomeViewModel: HomeViewModelDelegate{
     func selectLanguage(_ language: Language) {
         LanguageManager.shared.setLang(language) {
             Task{
+                self.totalNewsList.removeAll()
+                self.totalAttractionsList.removeAll()
                 await self.getAllInfos()
             }
         }
