@@ -7,11 +7,9 @@
 
 import Foundation
 
-protocol HomeViewModelDelegate{
+protocol HomeViewModelDelegate: CoordinatorDelegate{
     var newsListPublisher: Published<[NewsData]>.Publisher {get}
     var attractionsListPublisher: Published<[AttractionData]>.Publisher {get}
-    var urlPublisher: Published<URL?>.Publisher {get}
-    var attractionDataPublisher: Published<AttractionData?>.Publisher {get}
     
     func getNextNews()
     func getNextAttractions()
@@ -21,15 +19,13 @@ protocol HomeViewModelDelegate{
 }
 
 class HomeViewModel: HomeViewModelDelegate{
-    @Published var attractionData: AttractionData?
+    @Published var viewController: BaseViewController?
     @Published var newsList: [NewsData]
     @Published var attractionsList: [AttractionData]
-    @Published var url: URL?
     
     var newsListPublisher: Published<[NewsData]>.Publisher { $newsList}
-    var attractionsListPublisher: Published<[AttractionData]>.Publisher { $attractionsList}
-    var urlPublisher: Published<URL?>.Publisher {$url}
-    var attractionDataPublisher: Published<AttractionData?>.Publisher { $attractionData}
+    var attractionsListPublisher: Published<[AttractionData]>.Publisher { $attractionsList}    
+    var vcPublisher: Published<BaseViewController?>.Publisher{ $viewController }
     
     var newsPage: Int
     var attractionPage: Int
@@ -79,11 +75,12 @@ class HomeViewModel: HomeViewModelDelegate{
     
     func getSelectedNewsData(_ data: NewsData){
         let urlStr = data.url
-        url = URL(string: urlStr)
+        guard let url = URL(string: urlStr) else { return }
+        viewController = Coordinator.shared.prepareWebViewController(url: url)
     }
     
     func getSelectedAttractionData(_ data: AttractionData){
-        attractionData = data
+        viewController = Coordinator.shared.prepareAttractionViewCOntroller(data: data)
     }
     
     func selectLanguage(_ language: Language) {

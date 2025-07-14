@@ -111,6 +111,15 @@ class AttractionDetailViewController: BaseViewController{
     }
         
     override func binding() {
+        viewModel?.vcPublisher
+            .receive(on: DispatchQueue.main)
+            .sink(receiveValue: { [weak self] val in
+                guard let val else {return}
+                
+                self?.navigationController?.pushViewController(val, animated: true)
+            })
+            .store(in: &cancellables)
+        
         viewModel?.namePublisher
             .receive(on: DispatchQueue.main)
             .sink { [weak self] val in
@@ -218,10 +227,6 @@ class AttractionDetailViewController: BaseViewController{
     }
     
     @objc func buttonTap(){
-        guard let viewModel, let url = URL(string: viewModel.urlString)else { return }
-        
-        let vc = DefaultWebViewController()
-        vc.viewModel = DefaultWebViewModel(url: url, title: viewModel.theName)
-        self.navigationController?.pushViewController(vc, animated: true)
+        viewModel?.goWeb()
     }
 }

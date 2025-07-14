@@ -78,7 +78,7 @@ class HomeViewController: BaseViewController {
         }
         
         let newsLeadingConst = newsTableView.leadingAnchor.constraint(equalTo: self.view.leadingAnchor)
-        let attractionsLeadingConst = attractionsTableView.leadingAnchor.constraint(equalTo: self.view.leadingAnchor, constant: self.view.bounds.width)
+        let attractionsLeadingConst = attractionsTableView.leadingAnchor.constraint(equalTo: self.newsTableView.trailingAnchor)
         
         NSLayoutConstraint.activate([
             segmentControl.topAnchor.constraint(equalTo: self.view.topAnchor, constant: 100),
@@ -101,6 +101,15 @@ class HomeViewController: BaseViewController {
     }
     
     override func binding() {
+        viewModel?.vcPublisher
+            .receive(on: DispatchQueue.main)
+            .sink(receiveValue: { [weak self] val in
+                guard let val else {return}
+                
+                self?.navigationController?.pushViewController(val, animated: true)
+            })
+            .store(in: &cancellables)
+        
         viewModel?.newsListPublisher
             .receive(on: DispatchQueue.main)
             .sink(receiveValue: { [weak self] val in
@@ -113,26 +122,6 @@ class HomeViewController: BaseViewController {
             .receive(on: DispatchQueue.main)
             .sink(receiveValue: { [weak self] val in
                 self?.attractionsTableView.setSnapShot(data: val)
-            })
-            .store(in: &cancellables)
-        
-        viewModel?.urlPublisher
-            .receive(on: DispatchQueue.main)
-            .sink(receiveValue: { [weak self] val in
-                guard let val else { return }
-                let vc = DefaultWebViewController()
-                vc.viewModel = DefaultWebViewModel(url: val, title: "最新消息")
-                self?.navigationController?.pushViewController(vc, animated: true)
-            })
-            .store(in: &cancellables)
-        
-        viewModel?.attractionDataPublisher
-            .receive(on: DispatchQueue.main)
-            .sink(receiveValue: { [weak self] val in
-                guard let val else { return }
-                let vc = AttractionDetailViewController()
-                vc.viewModel = AttractionDetailViewModel(data: val)
-                self?.navigationController?.pushViewController(vc, animated: true)
             })
             .store(in: &cancellables)
     }

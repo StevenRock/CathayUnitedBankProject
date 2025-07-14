@@ -35,6 +35,8 @@ class SlideshowView: UIView{
     
     var bannerStackView: UIStackView?
     
+    var imageViews: [UIImageView] = []
+    
     var pageControlTimer: Timer?
     var bannerIndex = 0
     var bannerDidTapped: ((_ index: Int)->Void)?
@@ -101,6 +103,7 @@ class SlideshowView: UIView{
             imgView.contentMode = .scaleAspectFill
             
             stack.addArrangedSubview(imgView)
+            imageViews.append(imgView)
         }
         
         pageControl.numberOfPages = imgs.count
@@ -132,8 +135,6 @@ class SlideshowView: UIView{
     
     override func layoutIfNeeded() {
         super.layoutIfNeeded()
-        
-        setScrollContent(imgs: source)
     }
     
     @objc private func scrollToNext(){
@@ -155,6 +156,12 @@ class SlideshowView: UIView{
         let pageNum = round(scrollView.contentOffset.x / scrollView.frame.width)
         pageControl.currentPage = Int(pageNum)
         bannerIndex = Int(pageNum)
+    }
+    
+    override func layoutSubviews() {
+        super.layoutSubviews()
+        
+        setScrollContent(imgs: source)
     }
 }
 

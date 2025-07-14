@@ -15,8 +15,7 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
     func scene(_ scene: UIScene, willConnectTo session: UISceneSession, options connectionOptions: UIScene.ConnectionOptions) {
         guard let windowScene = (scene as? UIWindowScene) else { return }
         window = UIWindow(frame: UIScreen.main.bounds)
-        let rootController = HomeViewController()//MainTabBarController()
-        rootController.viewModel = HomeViewModel()
+        let rootController = Coordinator.shared.initFirstViewController()
         
         let nav = BaseNavigationViewController(rootViewController: rootController)
         self.window?.rootViewController = nav

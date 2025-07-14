@@ -7,7 +7,7 @@
 
 import Foundation
 
-protocol AttractionDetailViewModelDelegate {
+protocol AttractionDetailViewModelDelegate: CoordinatorDelegate {
     var namePublisher: Published<String>.Publisher { get }
     var timePublisher: Published<String>.Publisher { get }
     var telPublisher: Published<String>.Publisher { get }
@@ -16,11 +16,11 @@ protocol AttractionDetailViewModelDelegate {
     var webPublisher: Published<String>.Publisher { get }
     var slidersPublisher: Published<[(URL?, Int)]>.Publisher {get}
     
-    var theName: String { get }
-    var urlString: String { get }
+    func goWeb()
 }
 
 class AttractionDetailViewModel: AttractionDetailViewModelDelegate {
+    @Published var viewController: BaseViewController?
     @Published var name: String
     @Published var time: String
     @Published var tel: String
@@ -36,6 +36,8 @@ class AttractionDetailViewModel: AttractionDetailViewModelDelegate {
     var descriptionPublisher: Published<String>.Publisher { $description}
     var webPublisher: Published<String>.Publisher { $web}
     var slidersPublisher: Published<[(URL?, Int)]>.Publisher { $sliders}
+    
+    var vcPublisher: Published<BaseViewController?>.Publisher { $viewController }
     
     var urlString: String
     var theName: String
@@ -65,6 +67,11 @@ class AttractionDetailViewModel: AttractionDetailViewModelDelegate {
         }
         
         sliders = tuple
+    }
+    
+    func goWeb() {
+        guard let url = URL(string: urlString) else { return }
+        viewController = Coordinator.shared.prepareWebViewController(url: url, title: theName)
     }
     
 }

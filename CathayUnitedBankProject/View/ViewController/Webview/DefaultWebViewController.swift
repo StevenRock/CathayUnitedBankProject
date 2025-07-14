@@ -7,7 +7,7 @@
 
 import Foundation
 import WebKit
-
+import SwiftUI
 
 class DefaultWebViewController: BaseViewController{
     lazy var infoWebView: WKWebView = {
@@ -17,32 +17,17 @@ class DefaultWebViewController: BaseViewController{
         return v
     }()
     
-    var titleVal: String?{
-        didSet{
-            self.title = titleVal
-        }
-    }
-    var url: URL?{
-        didSet{
-            DispatchQueue.main.async {
-                self.loadWeb()
-            }
-        }
-    }
-    
     var viewModel: DefaultWebViewModelDelegate?{
         didSet{
             binding()
         }
     }
     
-    override func viewDidLoad() {
-        super.viewDidLoad()
-    }
+    var orbitView: UIView?
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        
+        runOrbit()
     }
     
     override func binding() {
@@ -55,7 +40,7 @@ class DefaultWebViewController: BaseViewController{
                     print("get map URL failed")
                     return
                 }
-                self?.url = val
+                self?.loadWeb(url: val)
             }.store(in: &cancellables)
         
         viewModel.titlePublisher
@@ -78,11 +63,28 @@ class DefaultWebViewController: BaseViewController{
         ])
     }
     
-    private func loadWeb(){
+    private func loadWeb(url: URL?){
         guard let url = url else { return }
         let req = URLRequest(url: url)
         infoWebView.navigationDelegate = self
         infoWebView.load(req)
+    }
+    private func runOrbit(){
+        let hostVC = UIHostingController(rootView: JumpingOrbitView())
+        let orbitView = hostVC.view!
+        orbitView.translatesAutoresizingMaskIntoConstraints = false
+        addChild(hostVC)
+        
+        view.addSubview(orbitView)
+        
+        NSLayoutConstraint.activate([
+            orbitView.centerXAnchor.constraint(equalTo: self.view.centerXAnchor),
+            orbitView.centerYAnchor.constraint(equalTo: self.view.centerYAnchor)
+        ])
+        
+        hostVC.didMove(toParent: self)
+        
+        self.orbitView = orbitView
     }
 }
 
@@ -97,6 +99,8 @@ extension DefaultWebViewController: WKNavigationDelegate{
     
     func webView(_ webView: WKWebView, didFinish navigation: WKNavigation!) {
         print("SceneInfoVC load web finish loading")
+        
+        orbitView?.removeFromSuperview()
     }
 }
 
