@@ -11,6 +11,7 @@ protocol HomeViewModelDelegate{
     var newsListPublisher: Published<[NewsData]>.Publisher {get}
     var attractionsListPublisher: Published<[AttractionData]>.Publisher {get}
     var urlPublisher: Published<URL?>.Publisher {get}
+    var attractionDataPublisher: Published<AttractionData?>.Publisher {get}
     
     func getNextNews()
     func getNextAttractions()
@@ -20,8 +21,7 @@ protocol HomeViewModelDelegate{
 }
 
 class HomeViewModel: HomeViewModelDelegate{
-
-    
+    @Published var attractionData: AttractionData?
     @Published var newsList: [NewsData]
     @Published var attractionsList: [AttractionData]
     @Published var url: URL?
@@ -29,6 +29,7 @@ class HomeViewModel: HomeViewModelDelegate{
     var newsListPublisher: Published<[NewsData]>.Publisher { $newsList}
     var attractionsListPublisher: Published<[AttractionData]>.Publisher { $attractionsList}
     var urlPublisher: Published<URL?>.Publisher {$url}
+    var attractionDataPublisher: Published<AttractionData?>.Publisher { $attractionData}
     
     var newsPage: Int
     var attractionPage: Int
@@ -82,7 +83,7 @@ class HomeViewModel: HomeViewModelDelegate{
     }
     
     func getSelectedAttractionData(_ data: AttractionData){
-        
+        attractionData = data
     }
     
     func selectLanguage(_ language: Language) {

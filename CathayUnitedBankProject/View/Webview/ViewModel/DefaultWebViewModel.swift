@@ -8,22 +8,22 @@
 import Foundation
 
 protocol DefaultWebViewModelDelegate{
-    var strUrlPublisher: Published<String>.Publisher { get }
+    var strUrlPublisher: Published<URL?>.Publisher { get }
     var titlePublisher: Published<String>.Publisher { get }
 }
 
 class DefaultWebViewModel: DefaultWebViewModelDelegate{
-    @Published var strUrl: String
+    @Published var url: URL?
     @Published var title: String
     
-    var strUrlPublisher: Published<String>.Publisher {$strUrl}
+    var strUrlPublisher: Published<URL?>.Publisher {$url}
     var titlePublisher: Published<String>.Publisher {$title}
     
-    init(url: String?, title: String){
+    init(url: URL?, title: String){
         if let url = url{
-            strUrl = url
+            self.url = url
         }else{
-            strUrl = ""
+            self.url = nil
         }
         
         self.title = title

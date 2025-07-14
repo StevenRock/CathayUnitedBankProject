@@ -9,11 +9,7 @@ import UIKit
 import Kingfisher
 
 class SlideshowView: UIView{
-    var source: [URL]{
-        didSet{
-            setScrollContent(imgs: source)
-        }
-    }
+    var source: [URL]
     
     lazy var pageControl: UIPageControl = {
         let v = UIPageControl()
@@ -81,7 +77,13 @@ class SlideshowView: UIView{
     
     private func setScrollContent(imgs: [URL]){
         bannerStackView?.removeFromSuperview()
-        guard !imgs.isEmpty else { return }
+        guard !imgs.isEmpty else {
+            let imgView = UIImageView(frame: CGRect(origin: .zero, size: CGSize(width: self.frame.width, height: self.frame.height)))
+            imgView.image = UIImage(resource: .mainLogo)
+            imgView.contentMode = .scaleAspectFill
+            self.addSubview(imgView)
+            return
+        }
         
         var tag = 0
         let stack = UIStackView()
@@ -93,13 +95,12 @@ class SlideshowView: UIView{
         
         for img in imgs {
             tag += 1
-            let btn = UIButton(frame: CGRect(origin: .zero, size: CGSize(width: self.frame.width, height: self.frame.height)))
-            btn.kf.setImage(with: img, for: .normal)
-            btn.tag = tag
-            btn.imageView?.contentMode = .scaleAspectFill
-            btn.addTarget(self, action: #selector(tapOnBanner), for: .touchUpInside)
+            let imgView = UIImageView(frame: CGRect(origin: .zero, size: CGSize(width: self.frame.width, height: self.frame.height)))
+            imgView.kf.setImage(with: img)
+            imgView.tag = tag
+            imgView.contentMode = .scaleAspectFill
             
-            stack.addArrangedSubview(btn)
+            stack.addArrangedSubview(imgView)
         }
         
         pageControl.numberOfPages = imgs.count
@@ -129,6 +130,12 @@ class SlideshowView: UIView{
         }
     }
     
+    override func layoutIfNeeded() {
+        super.layoutIfNeeded()
+        
+        setScrollContent(imgs: source)
+    }
+    
     @objc private func scrollToNext(){
         bannerIndex += 1
         
@@ -148,14 +155,6 @@ class SlideshowView: UIView{
         let pageNum = round(scrollView.contentOffset.x / scrollView.frame.width)
         pageControl.currentPage = Int(pageNum)
         bannerIndex = Int(pageNum)
-//        let x = CGFloat(pageNum) * scrollView.frame.width
-//        UIView.animate(withDuration: 0.4, delay: 0) {
-//            scrollView.setContentOffset(CGPoint(x: x, y: 0), animated: false)
-//        }
-    }
-    
-    @objc private func tapOnBanner(_ sender: UIButton){
-        bannerDidTapped?(sender.tag)
     }
 }
 
@@ -165,10 +164,6 @@ extension SlideshowView: UIScrollViewDelegate{
     
     func scrollViewDidEndDecelerating(_ scrollView: UIScrollView) {
         setOffset(scrollView: scrollView)
-    }
-
-    func scrollViewDidEndDragging(_ scrollView: UIScrollView, willDecelerate decelerate: Bool) {
-//        setOffset(scrollView: scrollView)
     }
 }
 

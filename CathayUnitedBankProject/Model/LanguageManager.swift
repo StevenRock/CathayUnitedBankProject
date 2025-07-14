@@ -34,6 +34,48 @@ enum Language: String, CaseIterable{
         }
     }
     
+    var newsTitle: String{
+        switch self{
+        case.taiwan, .china: return "最新消息"
+        default: return "News"
+        }
+    }
+    
+    var attractionTitle: String{
+        switch self{
+        case.taiwan, .china: return "旅遊景點"
+        default: return "Attraction"
+        }
+    }
+    
+    var businesshourTitle: String{
+        switch self{
+        case.taiwan, .china: return "營業時間"
+        default: return "Business Hour"
+        }
+    }
+    
+    var addressTitle: String{
+        switch self{
+        case.taiwan, .china: return "地址"
+        default: return "Address"
+        }
+    }
+    
+    var telTitle: String{
+        switch self{
+        case.taiwan, .china: return "電話"
+        default: return "Tel"
+        }
+    }
+    
+    var webAddressTitle: String{
+        switch self{
+        case.taiwan, .china: return "網址"
+        default: return "Web Address"
+        }
+    }
+    
     var image: UIImage{
         switch self{
         case.taiwan: return UIImage(resource: .taiwan)

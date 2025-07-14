@@ -51,11 +51,11 @@ class DefaultWebViewController: BaseViewController{
         viewModel.strUrlPublisher
             .receive(on: DispatchQueue.main)
             .sink { [weak self] val in
-                guard let strUrl = val.addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed), let url = URL(string: strUrl) else{
+                guard let val else{
                     print("get map URL failed")
                     return
                 }
-                self?.url = url
+                self?.url = val
             }.store(in: &cancellables)
         
         viewModel.titlePublisher

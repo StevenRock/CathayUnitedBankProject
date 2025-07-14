@@ -11,12 +11,16 @@ class HomeViewController: BaseViewController {
     
     private lazy var homeTitleView: HomeTitleContainerView = {
         let v = HomeTitleContainerView()
-        v.languageDidChoosed = viewModel?.selectLanguage
+        v.languageDidChoosed = { [weak self] val in
+            self?.segmentControl.setTitle(val.newsTitle, forSegmentAt: 0)
+            self?.segmentControl.setTitle(val.attractionTitle, forSegmentAt: 1)
+            self?.viewModel?.selectLanguage(val)
+        }
         return v
     }()
     
     lazy var segmentControl: UISegmentedControl = {
-        let v = UISegmentedControl(items: ["最新消息", "旅遊景點"])
+        let v = UISegmentedControl(items: [LanguageManager.shared.lang.newsTitle, LanguageManager.shared.lang.attractionTitle])
         v.backgroundColor = .clear
         v.tintColor = .white
         v.addTarget(self, action: #selector(changeSegment), for: .valueChanged)
@@ -45,6 +49,7 @@ class HomeViewController: BaseViewController {
     
     var newsTableViewConst: NSLayoutConstraint?
     var attractionTableViewConst: NSLayoutConstraint?
+    var selectSegmentIndex: Int = 0
     
     var viewModel: HomeViewModelDelegate?{
         didSet{
@@ -59,7 +64,7 @@ class HomeViewController: BaseViewController {
     
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
-        segmentControl.selectedSegmentIndex = 0
+        segmentControl.selectedSegmentIndex = selectSegmentIndex
     }
 
     override func setupUI() {
@@ -103,7 +108,7 @@ class HomeViewController: BaseViewController {
 
             })
             .store(in: &cancellables)
-//        
+        
         viewModel?.attractionsListPublisher
             .receive(on: DispatchQueue.main)
             .sink(receiveValue: { [weak self] val in
@@ -116,18 +121,20 @@ class HomeViewController: BaseViewController {
             .sink(receiveValue: { [weak self] val in
                 guard let val else { return }
                 let vc = DefaultWebViewController()
-                vc.url = val
-                vc.titleVal = "最新消息"
+                vc.viewModel = DefaultWebViewModel(url: val, title: "最新消息")
                 self?.navigationController?.pushViewController(vc, animated: true)
-                
             })
             .store(in: &cancellables)
-    }
-    
-    
-    
-    func goWeb(_ data: NewsData){
         
+        viewModel?.attractionDataPublisher
+            .receive(on: DispatchQueue.main)
+            .sink(receiveValue: { [weak self] val in
+                guard let val else { return }
+                let vc = AttractionDetailViewController()
+                vc.viewModel = AttractionDetailViewModel(data: val)
+                self?.navigationController?.pushViewController(vc, animated: true)
+            })
+            .store(in: &cancellables)
     }
     
     @objc func changeSegment(sender: UISegmentedControl){
@@ -135,6 +142,7 @@ class HomeViewController: BaseViewController {
         var attractionOffet: CGFloat = 0
         
         let w = self.view.bounds.width
+        selectSegmentIndex = sender.selectedSegmentIndex
         
         newsOffset = (sender.selectedSegmentIndex == 0) ? 0 : -self.view.bounds.width
         

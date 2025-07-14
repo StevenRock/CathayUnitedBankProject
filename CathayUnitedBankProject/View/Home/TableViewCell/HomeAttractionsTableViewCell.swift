@@ -97,13 +97,13 @@ class HomeAttractionsTableViewCell: BaseTableViewCell {
     
     override func setCell(_ data: Any) {
         guard let data = data as? AttractionData else { return }
-        
+        let placeHolderImage = UIImage(resource: .mainLogo)
         titleLabel.text = data.name
         descriptionLabel.text = data.introduction
         if let src = data.images?.first?.src, let url = URL(string: src){
-            briefImageView.kf.setImage(with: url)
+            briefImageView.kf.setImage(with: url, placeholder: placeHolderImage)
         }else {
-            briefImageView.backgroundColor = .gray
+            briefImageView.image = placeHolderImage
         }
     }
 }
