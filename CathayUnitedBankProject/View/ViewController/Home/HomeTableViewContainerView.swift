@@ -7,7 +7,8 @@
 
 import UIKit
 
-class HomeTableViewContainerView<T: Hashable>: BaseView, UITableViewDelegate {
+class HomeTableViewContainerView<T: Hashable>: BaseView, UITableViewDelegate{
+    
     private let tableView: UITableView = {
         let v = UITableView()
         v.separatorStyle = .none
@@ -20,6 +21,8 @@ class HomeTableViewContainerView<T: Hashable>: BaseView, UITableViewDelegate {
     
     var cellDidSelected: ((T) -> Void)?
     var tableViewDidScroll: ((Bool)->Void)?
+    var activateLazyLoading: (()->Void)?
+    
     var lastContentOffset: CGFloat = 0
     
     let cellType: UITableViewCell.Type
@@ -30,6 +33,7 @@ class HomeTableViewContainerView<T: Hashable>: BaseView, UITableViewDelegate {
         
         super.init(frame: .zero)
         
+//        tableView.dataSource = self
         tableView.delegate = self
         tableView.register(cell, forCellReuseIdentifier: "cell")
         
@@ -65,6 +69,12 @@ class HomeTableViewContainerView<T: Hashable>: BaseView, UITableViewDelegate {
     }
     
     //UITableViewDelegate
+    func tableView(_ tableView: UITableView, willDisplay cell: UITableViewCell, forRowAt indexPath: IndexPath) {
+        if indexPath.row + 1 == dataSource.snapshot().numberOfItems{
+            activateLazyLoading?()
+        }
+    }
+    
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         
         guard let selectedItem = dataSource.itemIdentifier(for: indexPath) else { return }

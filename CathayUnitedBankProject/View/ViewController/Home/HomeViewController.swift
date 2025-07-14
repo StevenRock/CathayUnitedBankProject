@@ -33,6 +33,10 @@ class HomeViewController: BaseViewController {
         v.cellDidSelected = { [weak self] val in
             self?.viewModel?.getSelectedNewsData(val)
         }
+        
+        v.activateLazyLoading = { [weak self] in
+            self?.viewModel?.getNextNews()
+        }
         v.translatesAutoresizingMaskIntoConstraints = false
         return v
     }()
@@ -41,6 +45,10 @@ class HomeViewController: BaseViewController {
         let v = HomeTableViewContainerView<AttractionData>(cell: HomeAttractionsTableViewCell.self)
         v.cellDidSelected = { [weak self] val in
             self?.viewModel?.getSelectedAttractionData(val)
+        }
+        
+        v.activateLazyLoading = { [weak self] in
+            self?.viewModel?.getNextAttractions()
         }
         
         v.translatesAutoresizingMaskIntoConstraints = false

@@ -10,19 +10,8 @@
 		B0C925942E20EE2200753BCC /* Kingfisher in Frameworks */ = {isa = PBXBuildFile; productRef = B0C925932E20EE2200753BCC /* Kingfisher */; };
 /* End PBXBuildFile section */
 
-/* Begin PBXContainerItemProxy section */
-		B0C926462E25032200753BCC /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = B0C925362E1F6A9B00753BCC /* Project object */;
-			proxyType = 1;
-			remoteGlobalIDString = B0C9253D2E1F6A9B00753BCC;
-			remoteInfo = CathayUnitedBankProject;
-		};
-/* End PBXContainerItemProxy section */
-
 /* Begin PBXFileReference section */
 		B0C9253E2E1F6A9B00753BCC /* CathayUnitedBankProject.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = CathayUnitedBankProject.app; sourceTree = BUILT_PRODUCTS_DIR; };
-		B0C926402E25032200753BCC /* CathayUnitedBankProjectUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = CathayUnitedBankProjectUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
 /* Begin PBXFileSystemSynchronizedBuildFileExceptionSet section */
@@ -44,11 +33,6 @@
 			path = CathayUnitedBankProject;
 			sourceTree = "<group>";
 		};
-		B0C926412E25032200753BCC /* CathayUnitedBankProjectUITests */ = {
-			isa = PBXFileSystemSynchronizedRootGroup;
-			path = CathayUnitedBankProjectUITests;
-			sourceTree = "<group>";
-		};
 /* End PBXFileSystemSynchronizedRootGroup section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -60,13 +44,6 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
-		B0C9263D2E25032200753BCC /* Frameworks */ = {
-			isa = PBXFrameworksBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
@@ -74,7 +51,6 @@
 			isa = PBXGroup;
 			children = (
 				B0C925402E1F6A9B00753BCC /* CathayUnitedBankProject */,
-				B0C926412E25032200753BCC /* CathayUnitedBankProjectUITests */,
 				B0C9253F2E1F6A9B00753BCC /* Products */,
 			);
 			sourceTree = "<group>";
@@ -83,7 +59,6 @@
 			isa = PBXGroup;
 			children = (
 				B0C9253E2E1F6A9B00753BCC /* CathayUnitedBankProject.app */,
-				B0C926402E25032200753BCC /* CathayUnitedBankProjectUITests.xctest */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -114,29 +89,6 @@
 			productReference = B0C9253E2E1F6A9B00753BCC /* CathayUnitedBankProject.app */;
 			productType = "com.apple.product-type.application";
 		};
-		B0C9263F2E25032200753BCC /* CathayUnitedBankProjectUITests */ = {
-			isa = PBXNativeTarget;
-			buildConfigurationList = B0C926482E25032200753BCC /* Build configuration list for PBXNativeTarget "CathayUnitedBankProjectUITests" */;
-			buildPhases = (
-				B0C9263C2E25032200753BCC /* Sources */,
-				B0C9263D2E25032200753BCC /* Frameworks */,
-				B0C9263E2E25032200753BCC /* Resources */,
-			);
-			buildRules = (
-			);
-			dependencies = (
-				B0C926472E25032200753BCC /* PBXTargetDependency */,
-			);
-			fileSystemSynchronizedGroups = (
-				B0C926412E25032200753BCC /* CathayUnitedBankProjectUITests */,
-			);
-			name = CathayUnitedBankProjectUITests;
-			packageProductDependencies = (
-			);
-			productName = CathayUnitedBankProjectUITests;
-			productReference = B0C926402E25032200753BCC /* CathayUnitedBankProjectUITests.xctest */;
-			productType = "com.apple.product-type.bundle.ui-testing";
-		};
 /* End PBXNativeTarget section */
 
 /* Begin PBXProject section */
@@ -149,10 +101,6 @@
 				TargetAttributes = {
 					B0C9253D2E1F6A9B00753BCC = {
 						CreatedOnToolsVersion = 16.2;
-					};
-					B0C9263F2E25032200753BCC = {
-						CreatedOnToolsVersion = 16.2;
-						TestTargetID = B0C9253D2E1F6A9B00753BCC;
 					};
 				};
 			};
@@ -174,20 +122,12 @@
 			projectRoot = "";
 			targets = (
 				B0C9253D2E1F6A9B00753BCC /* CathayUnitedBankProject */,
-				B0C9263F2E25032200753BCC /* CathayUnitedBankProjectUITests */,
 			);
 		};
 /* End PBXProject section */
 
 /* Begin PBXResourcesBuildPhase section */
 		B0C9253C2E1F6A9B00753BCC /* Resources */ = {
-			isa = PBXResourcesBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-		B0C9263E2E25032200753BCC /* Resources */ = {
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -204,22 +144,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
-		B0C9263C2E25032200753BCC /* Sources */ = {
-			isa = PBXSourcesBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
 /* End PBXSourcesBuildPhase section */
-
-/* Begin PBXTargetDependency section */
-		B0C926472E25032200753BCC /* PBXTargetDependency */ = {
-			isa = PBXTargetDependency;
-			target = B0C9253D2E1F6A9B00753BCC /* CathayUnitedBankProject */;
-			targetProxy = B0C926462E25032200753BCC /* PBXContainerItemProxy */;
-		};
-/* End PBXTargetDependency section */
 
 /* Begin XCBuildConfiguration section */
 		B0C925552E1F6A9D00753BCC /* Debug */ = {
@@ -233,7 +158,6 @@
 				INFOPLIST_FILE = CathayUnitedBankProject/Info.plist;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen;
-				INFOPLIST_KEY_UIStatusBarStyle = "";
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
 				LD_RUNPATH_SEARCH_PATHS = (
@@ -260,7 +184,6 @@
 				INFOPLIST_FILE = CathayUnitedBankProject/Info.plist;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen;
-				INFOPLIST_KEY_UIStatusBarStyle = "";
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
 				LD_RUNPATH_SEARCH_PATHS = (
@@ -397,40 +320,6 @@
 			};
 			name = Release;
 		};
-		B0C926492E25032200753BCC /* Debug */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_TEAM = 5P63A36D7H;
-				GENERATE_INFOPLIST_FILE = YES;
-				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = tw.com.lig.CathayUnitedBankProjectUITests;
-				PRODUCT_NAME = "$(TARGET_NAME)";
-				SWIFT_EMIT_LOC_STRINGS = NO;
-				SWIFT_VERSION = 5.0;
-				TARGETED_DEVICE_FAMILY = "1,2";
-				TEST_TARGET_NAME = CathayUnitedBankProject;
-			};
-			name = Debug;
-		};
-		B0C9264A2E25032200753BCC /* Release */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_TEAM = 5P63A36D7H;
-				GENERATE_INFOPLIST_FILE = YES;
-				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = tw.com.lig.CathayUnitedBankProjectUITests;
-				PRODUCT_NAME = "$(TARGET_NAME)";
-				SWIFT_EMIT_LOC_STRINGS = NO;
-				SWIFT_VERSION = 5.0;
-				TARGETED_DEVICE_FAMILY = "1,2";
-				TEST_TARGET_NAME = CathayUnitedBankProject;
-			};
-			name = Release;
-		};
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
@@ -448,15 +337,6 @@
 			buildConfigurations = (
 				B0C925552E1F6A9D00753BCC /* Debug */,
 				B0C925562E1F6A9D00753BCC /* Release */,
-			);
-			defaultConfigurationIsVisible = 0;
-			defaultConfigurationName = Release;
-		};
-		B0C926482E25032200753BCC /* Build configuration list for PBXNativeTarget "CathayUnitedBankProjectUITests" */ = {
-			isa = XCConfigurationList;
-			buildConfigurations = (
-				B0C926492E25032200753BCC /* Debug */,
-				B0C9264A2E25032200753BCC /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;

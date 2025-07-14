@@ -27,6 +27,9 @@ class HomeViewModel: HomeViewModelDelegate{
     var attractionsListPublisher: Published<[AttractionData]>.Publisher { $attractionsList}    
     var vcPublisher: Published<BaseViewController?>.Publisher{ $viewController }
     
+    var totalNewsList: [NewsData] = []
+    var totalAttractionsList: [AttractionData] = []
+    
     var newsPage: Int
     var attractionPage: Int
     
@@ -49,8 +52,11 @@ class HomeViewModel: HomeViewModelDelegate{
             async let newsRes = NetworkService.shared.getNews(begin: dateTuple.begin, end: dateTuple.end, page: newsPage)
             async let attractionsRes = NetworkService.shared.getAllAttractions(page: attractionPage)
             
-            newsList = try await newsRes
-            attractionsList = try await attractionsRes
+            totalNewsList += try await newsRes
+            totalAttractionsList += try await attractionsRes
+            
+            newsList = totalNewsList
+            attractionsList = totalAttractionsList
         }catch{
             print(error)
         }
@@ -60,16 +66,20 @@ class HomeViewModel: HomeViewModelDelegate{
         let dateTuple = getDate()
 
         Task{
-            newsList = try await NetworkService.shared.getNews(begin: dateTuple.begin, end: dateTuple.end, page: newsPage)
             newsPage += 1
+            totalNewsList += try await NetworkService.shared.getNews(begin: dateTuple.begin, end: dateTuple.end, page: newsPage)
+            
+            newsList = totalNewsList
         }
     }
     
     func getNextAttractions(){
         
         Task{
-            attractionsList = try await NetworkService.shared.getAllAttractions(page: attractionPage)
             attractionPage += 1
+            totalAttractionsList = try await NetworkService.shared.getAllAttractions(page: attractionPage)
+            
+            attractionsList = totalAttractionsList
         }
     }
     
